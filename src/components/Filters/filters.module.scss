@@ -1,0 +1,40 @@
+.filtersList{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 232px; 
+    height: 244px;   
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.1);
+}
+
+
+.filtersList p {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding-left: 10px;
+    padding: 20px 0 18px 10px;
+}
+
+.filtersList label {
+    line-height: 40px;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 40px;
+    letter-spacing: 0px;
+    padding: 0 10px;
+}
+
+.filtersList label:hover {
+    background-color: rgba(241, 252, 255, 1);
+}
+
+.filtersList input {
+    margin-right: 10px;
+}
