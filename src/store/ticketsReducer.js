@@ -1,8 +1,8 @@
 const defaultState = {
     tickets: [],
-    copyTickets: [],
     loading: true,
     count: 5,
+    filteredTickets: [],
 }
 
 export function getAllTickets() {
@@ -30,9 +30,8 @@ export const ticketsReducer = (state = defaultState, action) => {
     case 'GET_TICKETS': 
         return {
             ...state,
-            tickets: action.payload,
+            tickets: [...state.tickets, ...action.payload],
             loading: false,
-            copyTickets: action.payload,
         }
 
     case 'GET_MORE':
@@ -40,8 +39,16 @@ export const ticketsReducer = (state = defaultState, action) => {
 
     case 'GET_WITHOUT':
         console.log('xax')
-        const without = state.tickets.filter(ticket => ticket.segments[0].stops.length === 0 || ticket.segments[1].stops.length === 0)
+        const without = state.tickets.filter(ticket => ticket.segments[0].stops.length === 0 && ticket.segments[1].stops.length === 0)
         return {...state, copyTickets: without}
+    
+    case 'GET_CHEAPEST2':
+        const cheapest = state.tickets.sort((a,b) => a.price - b.price)
+        return {...state, tickets: state.tickets.sort((a, b) => a.price - b.price)}
+    
+    case 'GET_FASTEST2':
+        const fastest = state.tickets.sort((a,b) => (b.segments[0].duration + b.segments[1].duration) - (a.segments[0].duration + a.segments[1].duration))
+        return {...state, tickets: fastest}
 
     default: return state
     

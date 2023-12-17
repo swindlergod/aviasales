@@ -11,4 +11,4 @@ const rootReducer = combineReducers({
     tickets: ticketsReducer,
 })
 
-export const store = configureStore({ reducer: rootReducer }, composeWithDevTools(applyMiddleware(thunk)))
+export const store = configureStore({ reducer: rootReducer }, composeWithDevTools())
