@@ -1,66 +1,124 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react'
 import classes from './ticketsList.module.scss'
-import Ticket from "./Ticket/ticket";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllTickets, sortCheapest } from "../../store/ticketsReducer";
+import Ticket from './Ticket/ticket'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllTickets, getSearchId } from '../../store/ticketsReducer'
+import { Spin } from 'antd'
 
 export default function TicketsList() {
+  const dispatch = useDispatch()
+  const { tickets, loading } = useSelector((state) => state.tickets)
+  const { filters } = useSelector((state) => state.filters)
+  const { sort, tabs } = useSelector((state) => state.sort)
+  const [initTickets, setTickets] = useState([])
+  const [slicer, setSlicer] = useState(5)
 
-    const ticket = useSelector(state => state.tickets.tickets)
-    const filteredTicket = useSelector(state => state.tickets.filteredTickets)
-    const loading = useSelector(state => state.tickets.loading)
-    const count = useSelector(state => state.tickets.count)
-    const filters = useSelector(state => state.filters.filters)
-    const sort = useSelector(state => state.sort.sort)
-
-    const dispatch = useDispatch()    
-
-    const getCheapest = () => {
-        dispatch({type: 'GET_CHEAPEST'})
-        dispatch({type: 'GET_CHEAPEST2'})
+  const actionHandler = (action) => {
+    switch (action) {
+      case 'cheapest':
+        dispatch({ type: 'GET_CHEAPEST' })
+        break
+      case 'fastest':
+        dispatch({ type: 'GET_FASTEST' })
+        break
+      case 'more':
+        setSlicer(slicer + 5)
+        break
+      default:
+        console.error('unavailable handle')
     }
+  }
 
-    const getFastest = () => {
-        dispatch({type: 'GET_FASTEST'})
-        dispatch({type: 'GET_FASTEST2'})
-    }
+  const sortTickets = useCallback(
+    (tickets) => {
+      if (sort === 'fastest') {
+        return tickets.sort(
+          (a, b) => a.segments[0].duration + a.segments[1].duration - (b.segments[0].duration + b.segments[1].duration)
+        )
+      }
+      if (sort === 'cheapest') {
+        return tickets.sort((a, b) => a.price - b.price)
+      }
+      return tickets
+    },
+    [sort]
+  )
 
-    const getMore = () => {
-        dispatch({type: 'GET_MORE'})
-    }
+  const filtTickets = useCallback(
+    (tickets) => {
+      return tickets.filter((ticket) => {
+        if (filters.includes('all')) {
+          return true
+        }
+        if (
+          filters.includes('without') &&
+          ticket.segments[0].stops.length === 0 &&
+          ticket.segments[1].stops.length === 0
+        ) {
+          return true
+        }
+        if (filters.includes('one') && ticket.segments[0].stops.length === 1 && ticket.segments[1].stops.length === 1) {
+          return true
+        }
+        if (filters.includes('two') && ticket.segments[0].stops.length === 2 && ticket.segments[1].stops.length === 2) {
+          return true
+        }
+        if (
+          filters.includes('three') &&
+          ticket.segments[0].stops.length === 3 &&
+          ticket.segments[1].stops.length === 3
+        ) {
+          return true
+        }
+        return false
+      })
+    },
+    [filters]
+  )
 
-    // const sortTickets = () => {
-    //     if(sort === 'cheapest'){
-    //         dispatch({type: 'SORT_CHEAPEST'})
-    //         return filteredTicket
-    //         // return filteredTicket.sort((a,b) => a.price - b.price)
-    //     } else {
-    //         return filteredTicket.sort((a,b) => a.segments[0].duration + a.segments[1].duration - b.segments[0].duration + b.segments[1].duration)
-    //     }
-    // }
+  useEffect(() => {
+    getSearchId()
+      .then((id) => dispatch(getAllTickets(id)))
+      .then(() => dispatch({ type: 'LOADING' }))
+  }, [dispatch])
 
+  useEffect(() => {
+    setTickets(sortTickets(filtTickets(tickets)))
+  }, [tickets, filtTickets, sortTickets])
 
-    useEffect(() => {
-        dispatch(getAllTickets())
-    },[dispatch])
-
-    return (
-        <div className={classes.ticketsList}>
-            <div className={classes.tabs}>
-                <button className={classes.tabsButtons} onClick={getCheapest}>Самый дешевый</button>
-                <button className={classes.tabsButtons} onClick={getFastest}>Самый быстрый</button>
-            </div>
-            {!loading && ticket.slice(0, count).map((tick) => (
-              <Ticket key={"id" + Math.random().toString(16).slice(2)} {...tick}/>))}    
-            <button className={classes.showMore} onClick={() => getMore()}> ПОКАЗАТЬ ЕЩЕ 5 БИЛЕТОВ! </button>           
-            
+  return (
+    <div className={classes.ticketsList}>
+      <div className={classes.tabs}>
+        {tabs.map((tab) => {
+          return (
+            <button
+              key={tab.id}
+              className={`${classes.tabsButtons} ${sort === tab.value ? classes.activeButton : null}`}
+              onClick={() => actionHandler(tab.value)}
+            >
+              {tab.name}
+            </button>
+          )
+        })}
+      </div>
+      {loading && (
+        <div className={classes.spin}>
+          Загружаем еще больше билетов...
+          <Spin />
         </div>
-    )
+      )}
+      {!initTickets.length && (
+        <div className={classes.message}>Рейсов, подходящих под заданные фильтры, не найдено</div>
+      )}
+      {initTickets.slice(0, slicer).map((initTicket, index) => {
+        return <Ticket key={index + Math.random().toString(32).slice(4)} {...initTicket} />
+      })}
+      {initTickets.length !== 0 && (
+        <button className={classes.showMore} onClick={() => actionHandler('more')}>
+          {' '}
+          ПОКАЗАТЬ ЕЩЕ 5 БИЛЕТОВ!{' '}
+        </button>
+      )}
+    </div>
+  )
 }
-
- // // )) : ticket.slice(0, count).map((tick) => (
-            // //     <Ticket key={"id" + Math.random().toString(16).slice(2)} {...tick}/>    
-            // //   ))}
-            // {/* {!loading && ticket.slice(0, count).map((tick) => (
-            //   <Ticket key={"id" + Math.random().toString(16).slice(2)} {...tick}/>    
-            // ))} */}

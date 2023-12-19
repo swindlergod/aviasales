@@ -1,40 +1,79 @@
-.filtersList{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    width: 232px; 
-    height: 244px;   
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.1);
+.filtersList {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 232px;
+  height: 244px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.1);
 }
-
 
 .filtersList p {
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 12px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    padding-left: 10px;
-    padding: 20px 0 18px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding-left: 10px;
+  padding: 15px 20px 5px 20px;
 }
 
-.filtersList label {
-    line-height: 40px;
-    width: 100%;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 40px;
-    letter-spacing: 0px;
-    padding: 0 10px;
+.label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  line-height: 40px;
+  width: 100%;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 40px;
+  letter-spacing: 0px;
 }
 
-.filtersList label:hover {
-    background-color: rgba(241, 252, 255, 1);
+.label:hover {
+  background-color: rgba(241, 252, 255, 1);
 }
 
-.filtersList input {
-    margin-right: 10px;
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  letter-spacing: 0.4px;
+  user-select: none;
+}
+
+.checkbox {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  z-index: -2;
+  margin-right: 20px;
+}
+
+.text:before {
+  content: '';
+  font-size: 14px;
+  width: 20px;
+  height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  min-width: 10px;
+  min-height: 10px;
+  border: 1px solid #9abbce;
+  border-radius: 3px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox:checked + .text:before {
+  content: '✔';
+  color: #2196f3;
+  border-color: #2196f3;
 }

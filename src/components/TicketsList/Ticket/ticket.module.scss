@@ -1,56 +1,55 @@
 .ticket {
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
 }
 
-
 .firstLine {
-    display: flex;
+  display: flex;
 }
 
 .price {
-    margin-right: auto;
-    line-height: 36px;
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 36px;
-    letter-spacing: 0px;
-    color: rgba(33, 150, 243, 1);
-    vertical-align: center;
+  margin-right: auto;
+  line-height: 36px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 36px;
+  letter-spacing: 0px;
+  color: rgba(33, 150, 243, 1);
+  vertical-align: center;
 }
 
 .lines {
-    display: flex;
-    gap: 10px;    
-    margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .lines:not(:last-child) {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .lines div {
-    width: 140px;
+  width: 140px;
 }
 
 .contentTitle {
-    font-family: Open Sans;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 18px;
-    letter-spacing: 0.5px;
-    text-align: left;
-    color: #A0B0B9;
+  font-family: Open Sans;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0.5px;
+  text-align: left;
+  color: #a0b0b9;
 }
 
 .content {
-    font-family: Open Sans;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 21px;
-    letter-spacing: 0px;
-    text-align: left;
-    color: #4A4A4A;
+  font-family: Open Sans;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #4a4a4a;
 }
