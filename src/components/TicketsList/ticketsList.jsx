@@ -1,9 +1,12 @@
+/* eslint-disable no-shadow */
 import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Spin } from 'antd'
+
+import { getAllTickets, getSearchId } from '../../store/ticketsReducer'
+
 import classes from './ticketsList.module.scss'
 import Ticket from './Ticket/ticket'
-import { useDispatch, useSelector } from 'react-redux'
-import { getAllTickets, getSearchId } from '../../store/ticketsReducer'
-import { Spin } from 'antd'
 
 export default function TicketsList() {
   const dispatch = useDispatch()
@@ -45,8 +48,8 @@ export default function TicketsList() {
   )
 
   const filtTickets = useCallback(
-    (tickets) => {
-      return tickets.filter((ticket) => {
+    (tickets) =>
+      tickets.filter((ticket) => {
         if (filters.includes('all')) {
           return true
         }
@@ -71,8 +74,7 @@ export default function TicketsList() {
           return true
         }
         return false
-      })
-    },
+      }),
     [filters]
   )
 
@@ -89,17 +91,16 @@ export default function TicketsList() {
   return (
     <div className={classes.ticketsList}>
       <div className={classes.tabs}>
-        {tabs.map((tab) => {
-          return (
-            <button
-              key={tab.id}
-              className={`${classes.tabsButtons} ${sort === tab.value ? classes.activeButton : null}`}
-              onClick={() => actionHandler(tab.value)}
-            >
-              {tab.name}
-            </button>
-          )
-        })}
+        {tabs.map((tab) => (
+          <button
+            type="button"
+            key={tab.id}
+            className={`${classes.tabsButtons} ${sort === tab.value ? classes.activeButton : null}`}
+            onClick={() => actionHandler(tab.value)}
+          >
+            {tab.name}
+          </button>
+        ))}
       </div>
       {loading && (
         <div className={classes.spin}>
@@ -110,11 +111,12 @@ export default function TicketsList() {
       {!initTickets.length && (
         <div className={classes.message}>Рейсов, подходящих под заданные фильтры, не найдено</div>
       )}
-      {initTickets.slice(0, slicer).map((initTicket, index) => {
-        return <Ticket key={index + Math.random().toString(32).slice(4)} {...initTicket} />
-      })}
+      {initTickets.slice(0, slicer).map((initTicket) => (
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        <Ticket key={`id${Math.random().toString(32).slice(4)}`} {...initTicket} />
+      ))}
       {initTickets.length !== 0 && (
-        <button className={classes.showMore} onClick={() => actionHandler('more')}>
+        <button type="button" className={classes.showMore} onClick={() => actionHandler('more')}>
           {' '}
           ПОКАЗАТЬ ЕЩЕ 5 БИЛЕТОВ!{' '}
         </button>
